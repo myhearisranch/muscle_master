@@ -7,27 +7,38 @@ void main() {
 
     'images/sushi.png'
   );
+
+  final con2 = Container(
+    color: Colors.blue,
+    width: 500,
+    height: 400,
+  );
+
+  final con = Container(
+    color: Colors.deepOrange,
+    width: 200,
+    height: 130,
+
+    //コンテンナ内のchildは1つだけ
+    //コンテナの中にコンテナを置くこともできる。
+    child: con2,
+
+    //コンテナ内のchildの位置を寄せる
+    alignment: Alignment.centerLeft,
+
+    //padding: コンテナ内に見えない壁を作る -> コンテナ内のchildはそれ以上膨らまなくなる
+    //EdgeInsetsクラスを使う
+    padding: EdgeInsets.fromLTRB(10, 20, 30, 40)
+  );
+
+  
+
   final col = Column(
     mainAxisAlignment: MainAxisAlignment.center,
     mainAxisSize: MainAxisSize.min,
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
-      // Image.asset('images/sushi.png'), 
-
-      img, img, img
-
-
-      //インターネットを通じて画像を表示する
-      // Image.network(
-      //   'https://flutter-image-network.web.app/inu.jpeg'
-      // ),
-
-      //補足:
-      //画像を送り合うことはそんなにない。
-      //画像は別の専用のサーバーに保管してあり、(AWS Amazon S3というサービスが使われる。)
-      //画像を見たい人がそこに見にいくイメージ
-
-
+     con,
     ],
   );
 
