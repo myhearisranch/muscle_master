@@ -2,32 +2,32 @@ import 'package:flutter/material.dart';
 
 void main() {
 
-  xxxx(){
-    debugPrint('これから通信始めます');
-    debugPrint('通信中です');
-    debugPrint('通信が終わりました');
-  }
+  //コントローラー: テキストフィールドで入力された文字を格納する場所
+  //別のウィジェットでその文字を使うようにできる。
+  final controller = TextEditingController();
 
-  final button = ElevatedButton(
+  final textField = TextField(
+    decoration: InputDecoration(
 
-    //ボタンを押した時に動く関数を設定する
-    onPressed: xxxx,
+      //テキストフィールドを線で囲む
+      border: OutlineInputBorder(),
 
-    //押せないボタンにする時
-    //onPressed: null
+      //テキストフィールドにラベルを表示する
+      labelText: 'あなたの名前',
 
-    //ボタンの中に表示するウィジェットを設定する
-    child: Text('押してみて'),
-    style: ElevatedButton.styleFrom(
-      backgroundColor: Colors.green,
+      //テキストフィールド内に注意書を表示する
+      hintText: 'カタカナで入力してください',
+
+      //エラーの文字を表示する
+      errorText: '文字が長すぎます',
+
     ),
-
   );
 
   final a = MaterialApp(
     home: Scaffold(
       body: Center(
-        child: button,
+        child: textField,
       ),
     ),
   );
