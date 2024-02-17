@@ -1,105 +1,62 @@
 import 'package:flutter/material.dart';
 
-//モデルを用意する(Flutterだとクラスを用意すればいい)
+//go_routerを使うのに必要なパッケージをインポートする
+import 'package:go_router/go_router.dart';
 
-//ツイート(一つのデータに必要なデータを決めた)
-class Tweet{
+import 'page_a.dart'; // page_a.dartへのファイルパスを修正
+import 'page_b.dart'; // page_b.dartへのファイルパスを修正
+import 'page_c.dart'; // page_c.dartへのファイルパスを修正
 
-  //ユーザーの名前
-  final String userName;
+//画面の進む、戻るを実装する  => go_routerを使う
 
-  //アイコン画像
-  final String iconUrl;
+//go_routerの使い方:
+//パスと画面の組み合わせを決める
 
-  //文章メッセージ
-  final String text; 
+// 例: /a - PageA
+//     /b - PageB
 
-  //送信日時
-  final String createdAt;
 
-  //コンストラクタ
-  Tweet(this.userName, this.iconUrl, this.text, this.createdAt);
-}
-
-// 適当なモデル
-final models = [
-  Tweet('ルフィ', 'icon1.png', '海賊王におれはなる！', '2022/1/1'),
-  Tweet('ゾロ', 'icon2.png', 'おれはもう！二度と敗けねェから！', '2022/1/2'),
-  Tweet('ナミ', 'icon3.png', 'もう背中向けられないじゃないっ！', '2022/1/3'),
-  Tweet('ウソップ', 'icon4.png', 'お前らの”伝説のヒーロー”になってやる！', '2022/1/4'),
-  Tweet('サンジ', 'icon5.png', 'たとえ死んでもおれは女は蹴らん・・・！', '2022/1/5'),
-  Tweet('チョッパー', 'icon6.png', '人間ならもっと自由だ！', '2022/1/6'),
-  Tweet('ビビ', 'icon7.png', 'もう一度仲間と呼んでくれますか!?', '2022/1/7'),
-  Tweet('ロビン', 'icon8.png', '生ぎたいっ！', '2022/1/8'),
-  Tweet('フランキー', 'icon9.png', '存在することは罪にはならねェ！', '2022/1/9'),
-  Tweet('ブルック', 'icon10.png', '男が一度・・・必ず帰ると言ったのだから！', '2022/1/10'),
-  Tweet('ジンベイ', 'icon11.png', '失ったものばかり数えるな！', '2022/1/11'),
-  Tweet('シャンクス', 'icon1.png', 'この帽子をお前に預ける', '2022/2/1'),
-  Tweet('ヒルルク', 'icon2.png', '違う!…人に忘れられた時さ…!', '2022/2/2'),
-  Tweet('ドクタークレハ', 'icon3.png', '優しいだけじゃ人は救えないんだ!', '2022/2/3'),
-  Tweet('ティーチ', 'icon4.png', '人の夢は!終わらねェ!', '2022/2/4'),
-  Tweet('ガンフォール', 'icon5.png', '人の生きるこの世界に“神”などおらぬ!', '2022/2/5'),
-  Tweet('ボンクレー', 'icon6.png', '理由なんざ他にゃいらねェ!', '2022/2/6'),
-  Tweet('イワンコフ', 'icon7.png', '“奇跡”ナメるんじゃないよォ!', '2022/2/7'),
-  Tweet('ニューゲート', 'icon8.png', 'バカな息子をそれでも愛そう・・・', '2022/1/8'),
-  Tweet('エース', 'icon9.png', '愛してくれて・・・ありがとう', '2022/2/9'),
-  Tweet('ロー', 'icon10.png', '取るべきイスは…必ず奪う!', '2022/2/10'),
-  Tweet('サボ', 'icon11.png', '以後ルフィのバックにはおれがついてる!', '2022/2/11'),
-  Tweet('バルトロメオ', 'icon1.png', 'この子分盃!勝手に頂戴いたしますだべ!', '2022/3/1'),
-];
-
-//モデルをウィジェットに変換する関数を作成する
-//引数をTweet modelとすることで上で作ったTweetのモデルを使うことができる、
-Widget modelToWidget(Tweet model) {
-  // ユーザーアイコン
-  final icon = Container(
-    margin: const EdgeInsets.all(20),
-    width: 60,
-    height: 60,
-    // 画像を丸くする
-    child: ClipRRect(
-      borderRadius: BorderRadius.circular(30.0),
-      child: Image.asset('assets/images/${model.iconUrl}'),
-    ),
-  );
-
-  //アイコンウィジェットを返す
-  return icon;
-
-  //これを書かないとflutter run -d web-server --web-port=8889 --web-hostname 0.0.0.0とした時、下記のようなエラーが発生する
-  //   lib/main.dart:53:8: Error: A non-null value must be returned since the return type 'Widget' doesn't allow null.
-  //  - 'Widget' is from 'package:flutter/src/widgets/framework.dart' ('../flutter/packages/flutter/lib/src/widgets/framework.dart').
-  //   Widget modelToWidget(Tweet model) {
-  //       ^
-  //   Waiting for connection from debug service on Web Server...         94.5s
-  //   Failed to compile application.
-  
-}
-
-void main() {
-  // ツイートのリスト
-  final list = ListView.builder(
-    itemCount: models.length,
-    itemBuilder: (c, i) => modelToWidget(models[i]),
-  );
-
-  final con = Center(
-    child: SizedBox(
-      height: 400,
-      child: list,
-    ),
-  );
-
-  // 画面
-  final sca = Scaffold(
-    backgroundColor: Colors.grey,
-    body: con,
-  );
-
-  // アプリ
-  final app = MaterialApp(home: sca);
-  // アプリを動かす
+main() {
+  final app = App();
   runApp(app);
 }
+
+//アプリ全体
+class App extends StatelessWidget {
+  App({super.key});
+
+  final router = GoRouter(
+    //initialLocation: アプリが始まった時のパスを設定する
+    initialLocation: '/a',
+    // パスと画面の組み合わせ
+    routes: [
+      GoRoute(
+        // /aのパスならPageAという設定をしている
+        path: '/a',
+        builder: (context, state) => const PageA(),
+      ),
+      GoRoute(
+        path: '/b',
+        builder: (context, state) => const PageB(),
+      ),
+      GoRoute(
+        path: '/c',
+        builder: (context, state) => const PageC(),
+      ),
+    ],
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      //go_routerの決まった書き方
+      routeInformationProvider: router.routeInformationProvider,
+      routeInformationParser: router.routeInformationParser,
+      routerDelegate: router.routerDelegate,
+    );
+  }
+}
+
+
 
 

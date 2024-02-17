@@ -28,6 +28,8 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  #go_routerを使うのに必要なパッケージ
+  go_router:
   # riverpodを使うのに必要なパッケージ
   flutter_riverpod:
   flutter:
