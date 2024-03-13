@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 void main() {
   const app = MaterialApp(home: Home());
@@ -7,110 +8,118 @@ void main() {
   runApp(scope);
 }
 
-// 選ばれたラジオボタンID
-final radioIdProvider = StateProvider<String?>((ref) {
-  // 最初はどれも選ばれていないので null
-  return null;
+//どのくらい進んだかを表す パーセント
+final percentProvider = StateProvider((ref){
+  //最初は0%からスタート
+  return 0.00;
 });
 
-// 選ばれたチェックボックスIDたち
-final checkedIdsProvider = StateProvider<Set<String>>((ref) {
-  // 最初は空っぽ {}
-  return {};
-});
-
+// ホーム画面
 class Home extends ConsumerWidget {
   const Home({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // ラジオボタンID に合わせて画面を変化
-    final radioId = ref.watch(radioIdProvider);
-    // チェックボックスIDたち に合わせて画面を変化
-    final checkedIds = ref.watch(checkedIdsProvider);
 
-    // ラジオボタンが押されたときの関数
-    void onChangedRadio(String? id) {
-      ref.read(radioIdProvider.notifier).state = id!;
-    }
+    //パーセント
+    final percent = ref.watch(percentProvider);
 
-    // チェックボックスが押された時の関数
-    void onChangedCheckbox(String id) {
-      final newSet = Set.of(checkedIds);
-      if (checkedIds.contains(id)) {
+    //丸型のインジケーター
+    final circular = CircularPercentIndicator(
+      //変化していく値を指定
+      percent: percent,
+      //丸型インジケーターの全体の色
+      backgroundColor: Colors.yellow,
+      //値が変化していくことで範囲が変わる色
+      progressColor: Colors.green,
+      //円の大きさ
+      radius: 60,
+      //円の太さ
+      lineWidth: 20,
+      //インジケーターの真ん中に文字を置く
+      center: Text('${percent * 100}%'),
 
-        //既にチェックされていたら取り除く
-        newSet.remove(id);
-      } else {
 
-        //まだチェックされていなければ追加
-        newSet.add(id);
-      }
-      ref.read(checkedIdsProvider.notifier).state = newSet;
-    }
+      //インジケーターに伸びる動きを付けられる
+      animation: true,
+      //インジケーターの動く速さを変える
+      animationDuration: 200,
+      //最初の部分から動きを見せるかがをtrueかfalseで決める
+      animateFromLastPercent: true,
+    );
 
-    // 縦に並べる
-    final col = Column(
+    //棒型のインジケーター
+    final linear = LinearPercentIndicator(
+      percent: percent,
+      backgroundColor: Colors.yellow,
+      progressColor: Colors.green,
+      alignment: MainAxisAlignment.center,
+      lineHeight: 20,
+      width: 300,
+    );
+
+    //ボタン
+   final button = ElevatedButton(
+      onPressed: () => onPressed(ref),
+      child: const Text('スタート'),
+    );
+
+
+    //縦に並べるカラム
+    final column = Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        // ラジオボタンたち
-
-        RadioListTile(
-          groupValue: radioId,
-          onChanged: onChangedRadio,
-          value: 'A',
-          title: const Text('ラジオボタンA'),
-        ),
-
-        RadioListTile(
-          groupValue: radioId,
-          onChanged: onChangedRadio,
-          value: 'B',
-          title: const Text('ラジオボタンB'),
-        ),
-
-        RadioListTile(
-          groupValue: radioId,
-          onChanged: onChangedRadio,
-          value: 'C',
-          title: const Text('ラジオボタンC'),
-        ),
-
-        // チェックボックス たち
-
-        CheckboxListTile(
-          onChanged: (check) => onChangedCheckbox('A'),
-          value: checkedIds.contains('A'),
-          title: const Text('チェックボックスA'),
-        ),
-
-        CheckboxListTile(
-          onChanged: (check) => onChangedCheckbox('B'),
-          value: checkedIds.contains('B'),
-          title: const Text('チェックボックスB'),
-        ),
-
-        CheckboxListTile(
-          onChanged: (check) => onChangedCheckbox('C'),
-          value: checkedIds.contains('C'),
-          title: const Text('チェックボックスC'),
-        ),
-
-        // OK ボタン
-
-        ElevatedButton(
-          onPressed: () {
-            // 選ばれたラジオボタンIDを確認する
-            debugPrint(radioId);
-            // 選ばれたチェックボックスIDを確認する
-            debugPrint(checkedIds.toString());
-          },
-          child: const Text('OK'),
-        ),
+        circular,
+        linear,
+        button,
       ],
     );
 
     return Scaffold(
-      body: col,
+      body: Center(
+      child:column,
+      ),
     );
   }
+
+  //ボタンを押した時の関数
+    void onPressed(WidgetRef ref) async {
+      //1秒待つ
+      await Future.delayed(const Duration(seconds: 1));
+      //20%
+      ref.read(percentProvider.notifier).state = 0.20;
+      //1秒待つ
+      await Future.delayed(const Duration(seconds: 1));
+      //40%
+      ref.read(percentProvider.notifier).state = 0.40;
+      //1秒待つ
+      await Future.delayed(const Duration(seconds: 1));
+      //60%
+      ref.read(percentProvider.notifier).state = 0.60;
+      //1秒待つ
+      await Future.delayed(const Duration(seconds: 1));
+      //80%
+      ref.read(percentProvider.notifier).state = 0.80;
+      //1秒待つ
+      await Future.delayed(const Duration(seconds: 1));
+      //100%
+      ref.read(percentProvider.notifier).state = 1.00;
+    }
 }
+
+
+// エラー1:
+
+// lib/main.dart:26:22: Error: The method 'CircularPercentIndicator' isn't defined for the class 'Home'.
+//  - 'Home' is from 'package:workspace/main.dart' ('lib/main.dart').
+// Try correcting the name to the name of an existing method, or defining a method named 'CircularPercentIndicator'.
+//     final circular = CircularPercentIndicator(
+//                      ^^^^^^^^^^^^^^^^^^^^^^^^
+// lib/main.dart:40:20: Error: The method 'LinearPercentIndicator' isn't defined for the class 'Home'.
+//  - 'Home' is from 'package:workspace/main.dart' ('lib/main.dart').
+// Try correcting the name to the name of an existing method, or defining a method named 'LinearPercentIndicator'.
+//     final linear = LinearPercentIndicator(
+//                    ^^^^^^^^^^^^^^^^^^^^^^
+
+//原因:
+//main.dartにimport 'package:percent_indicator/percent_indicator.dart';を書いていなかった
