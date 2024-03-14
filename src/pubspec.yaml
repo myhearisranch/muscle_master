@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  google_fonts:
   freezed_annotation:
   percent_indicator:
   #go_routerを使うのに必要なパッケージ
@@ -63,6 +64,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/images/
+    - assets/google_fonts/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
